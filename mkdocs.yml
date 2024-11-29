@@ -1,0 +1,62 @@
+site_name: Workflow Canvas Documentation
+site_description: Documentation for the Workflow Canvas project
+site_author: Your Name
+repo_url: https://github.com/yourusername/workflow-canvas
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+  palette:
+    primary: blue
+    accent: blue
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+    - Configuration: getting-started/configuration.md
+  - User Guide:
+    - Overview: user-guide/overview.md
+    - Creating Workflows: user-guide/creating-workflows.md
+    - Visualization: user-guide/visualization.md
+    - Managing Workflows: user-guide/managing-workflows.md
+  - Developer Guide:
+    - Architecture: developer-guide/architecture.md
+    - Backend Development: developer-guide/backend.md
+    - Frontend Development: developer-guide/frontend.md
+    - Testing: developer-guide/testing.md
+  - API Reference:
+    - Authentication: api/authentication.md
+    - Endpoints: api/endpoints.md
+    - Models: api/models.md
+  - Contributing:
+    - Guidelines: contributing/guidelines.md
+    - Code Style: contributing/code-style.md
+    - Pull Requests: contributing/pull-requests.md
+  - About:
+    - Changelog: about/changelog.md
+    - License: about/license.md
+    - FAQ: about/faq.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - meta
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.emoji
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
