@@ -4,20 +4,22 @@ from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
 from sqlalchemy.orm import Session
+import logging
 
-from database import get_db, WorkflowModel
+from database import get_db, WorkflowModel, engine, Base
+from routers import docs, auth
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
 
 # Enhanced API documentation
 app = FastAPI(
     title="Workflow Canvas API",
-    description="""
-    API for Workflow Canvas - A simple, intuitive workflow management tool.
-    
-    Features:
-    * Create and manage workflows
-    * Store workflow content and metadata
-    * Visualize workflow data
-    """,
+    description="API for the Workflow Canvas application.",
     version="1.0.0",
     contact={
         "name": "Workflow Canvas Team",
@@ -28,14 +30,42 @@ app = FastAPI(
     }
 )
 
-# Add CORS middleware
+# Configure CORS
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],  # Allow both localhost and IP
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+async def startup_event():
+    logger.info("Starting up FastAPI application")
+    logger.info("Registered routes:")
+    for route in app.routes:
+        logger.info(f"Route: {route.path}, methods: {route.methods}")
+
+# Include routers
+logger.info("Registering documentation router")
+app.include_router(
+    docs.router,
+    prefix="/api/docs",
+    tags=["documentation"]
+)
+app.include_router(auth.router)
+
+@app.get("/test")
+async def test_endpoint():
+    """Test endpoint to verify API is working"""
+    return {"status": "ok", "message": "API is working"}
 
 class WorkflowBase(BaseModel):
     """Base Workflow model with common attributes"""
